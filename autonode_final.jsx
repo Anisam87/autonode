@@ -230,21 +230,24 @@ export default function App() {
 
         /* Mobile Adjustments */
         @media (max-width: 900px) {
-          .res-grid, .res-grid-eq { grid-template-columns: 1fr; gap: 40px; height: auto; padding: 120px 5% 40px; }
+          .res-grid, .res-grid-eq { display: flex; flex-direction: column; gap: 40px; height: auto; padding: 120px 4% 40px; }
+          .mobile-first { order: -1; }
           .stat-grid { grid-template-columns: 1fr; gap: 40px; margin-top: 40px; }
-          .hide-scroll { max-height: none !important; overflow: visible !important; }
+          .hide-scroll { max-height: none !important; overflow: visible !important; padding-right: 0 !important; }
           .snap-sec { scroll-snap-align: none; min-height: auto; padding: 60px 4%; }
-          .h-mega { font-size: clamp(30px, 8vw, 54px) !important; letter-spacing: -1px; }
+          .h-mega { font-size: clamp(36px, 12vw, 54px) !important; letter-spacing: -1px; }
           .stat-bg { font-size: 60vw !important; }
           nav { padding: 0 4% !important; }
-          nav .nl { padding: 6px 8px; font-size: 9px; }
+          nav .nl { padding: 8px 6px; font-size: 10px; }
+          .nav-links { gap: 6px !important; }
+          .imgbg { background-position: 60% center !important; }
         }
       `}</style>
 
       {/* MINIMAL FLOATING NAV */}
       <nav style={{position:"fixed",top:0,left:0,right:0,zIndex:1000,padding:"0 6%",height:70,display:"flex",alignItems:"center",justifyContent:"space-between",background:sc?"rgba(2,11,6,.85)":"transparent",backdropFilter:sc?"blur(24px)":"none",borderBottom:`1px solid ${sc?"rgba(34,197,94,0.08)":"transparent"}`,transition:"all .5s ease"}}>
         <div style={{display:"flex",alignItems:"center",gap:10,cursor:"pointer"}} onClick={()=>go("hero")}><Wordmark height={20}/></div>
-        <div style={{display:"flex",gap:16,alignItems:"center", background:"rgba(0,0,0,0.2)", padding:"6px", borderRadius:"30px", border:"1px solid rgba(255,255,255,0.05)"}}>
+        <div className="nav-links" style={{display:"flex",gap:16,alignItems:"center", background:"rgba(0,0,0,0.2)", padding:"6px", borderRadius:"30px", border:"1px solid rgba(255,255,255,0.05)"}}>
           <span className="nl" onClick={()=>go("stats")}>Vision</span>
           <span className="nl" onClick={()=>go("oem")}>OEMs</span>
           <span className="nl" onClick={()=>go("nbfc")}>NBFCs</span>
@@ -345,7 +348,7 @@ export default function App() {
             ))}
           </div>
 
-          <div>
+          <div className="mobile-first">
             <div className="lb" style={{color:"#14B8A6"}}>Destination 02 / Lenders</div>
             <h2 className="h-mega" style={{fontSize:"clamp(40px, 8vw, 84px)"}}>Price<br/><span className="it" style={{color:"#14B8A6"}}>the asset.</span></h2>
             <p className="bd" style={{marginTop:30, fontSize:18, marginBottom:40}}>

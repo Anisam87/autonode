@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Autonode — EV Lifecycle Intelligence</title>
+<meta name="description" content="The intelligence layer India's EV transition needs. Residual value intelligence for passenger and commercial EVs.">
+<meta property="og:title" content="Autonode — EV Lifecycle Intelligence">
+<meta property="og:description" content="We make EVs financeable — so they become sellable.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Space+Grotesk:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --void:#0A0A0A;
+  --void-soft:#121212;
+  --cream:#FAF5F0;
+  --terra:#E07A5F;
+  --terra-deep:#C4603F;
+  --gold:#F5A623;
+  --text-hi:#F4F0EA;
+  --text-mid:rgba(244,240,234,0.65);
+  --text-lo:rgba(244,240,234,0.35);
+  --serif:'Playfair Display',Georgia,serif;
+  --sans:'Space Grotesk',system-ui,sans-serif;
+  --mono:'IBM Plex Mono',monospace;
+  --ease:cubic-bezier(0.16,1,0.3,1);
+  --ease-out:cubic-bezier(0.33,1,0.68,1);
+}
+html{scroll-behavior:smooth;font-size:16px}
+body{
+  background:var(--void);
+  color:var(--text-hi);
+  font-family:var(--sans);
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+::selection{background:var(--terra);color:#fff}
+img{max-width:100%;display:block}
+
+.container{max-width:1280px;margin:0 auto;padding:0 clamp(24px,5vw,80px)}
+.label{
+  font-family:var(--mono);font-size:0.72rem;letter-spacing:0.22em;
+  text-transform:uppercase;color:var(--gold);font-weight:500;
+}
+
+/* ── Cursor glow ── */
+.cursor-glow{
+  position:fixed;width:600px;height:600px;
+  border-radius:50%;pointer-events:none;z-index:1;
+  background:radial-gradient(circle,rgba(224,122,95,0.07) 0%,transparent 70%);
+  transform:translate(-50%,-50%);
+  transition:left 0.8s var(--ease-out),top 0.8s var(--ease-out);
+  mix-blend-mode:screen;
+}
+
+/* ── Grain ── */
+.grain{
+  position:fixed;top:0;left:0;right:0;bottom:0;
+  pointer-events:none;z-index:9999;opacity:0.4;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+}
+
+/* ── Nav ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  padding:24px 0;transition:all 0.5s var(--ease);
+}
+nav.scrolled{
+  background:rgba(10,10,10,0.88);
+  backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);
+  padding:14px 0;border-bottom:1px solid rgba(255,255,255,0.04);
+}
+nav .container{display:flex;justify-content:space-between;align-items:center}
+.logo{font-family:var(--sans);font-weight:700;font-size:1.3rem;color:var(--text-hi);text-decoration:none;display:flex;align-items:center}
+.logo-slash{color:var(--gold);font-weight:400;margin-right:1px}
+.nav-btn{
+  padding:10px 26px;border:1px solid var(--terra);
+  background:transparent;border-radius:100px;cursor:pointer;
+  color:var(--terra);font-family:var(--mono);font-size:0.7rem;
+  letter-spacing:0.12em;text-transform:uppercase;
+  text-decoration:none;transition:all 0.35s var(--ease);
+}
+.nav-btn:hover{background:var(--terra);color:#fff}
+
+/* ── Reveal ── */
+[data-reveal]{opacity:0;transform:translateY(40px);transition:opacity 1.1s var(--ease),transform 1.1s var(--ease)}
+[data-reveal].in{opacity:1;transform:translateY(0)}
+[data-reveal="0.1"]{transition-delay:0.1s}
+[data-reveal="0.2"]{transition-delay:0.2s}
+[data-reveal="0.3"]{transition-delay:0.3s}
+[data-reveal="0.4"]{transition-delay:0.4s}
+[data-reveal="0.5"]{transition-delay:0.5s}
+[data-reveal="0.6"]{transition-delay:0.6s}
+
+/* ───────── HERO ───────── */
+.hero{
+  position:relative;min-height:100vh;overflow:hidden;
+  display:flex;align-items:flex-end;
+  padding-bottom:clamp(80px,12vh,140px);
+}
+.hero-bg{position:absolute;inset:0;z-index:0;overflow:hidden}
+.hero-bg img{
+  width:100%;height:100%;object-fit:cover;
+  animation:heroKen 20s ease-in-out infinite alternate;
+}
+@keyframes heroKen{
+  0%{transform:scale(1.05) translateX(0) translateY(0)}
+  100%{transform:scale(1.12) translateX(-2%) translateY(-1%)}
+}
+.hero-bg::after{
+  content:'';position:absolute;inset:0;
+  background:
+    linear-gradient(180deg,rgba(10,10,10,0.3) 0%,rgba(10,10,10,0.1) 25%,rgba(10,10,10,0.2) 55%,rgba(10,10,10,0.85) 85%,rgba(10,10,10,1) 100%),
+    linear-gradient(90deg,rgba(10,10,10,0.75) 0%,rgba(10,10,10,0.4) 45%,rgba(10,10,10,0.1) 100%);
+  z-index:1;
+}
+
+.hero-content{position:relative;z-index:2;width:100%;max-width:900px}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:8px 18px;border-radius:100px;
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.1);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  margin-bottom:2rem;
+}
+.hero-eyebrow .dot{
+  width:6px;height:6px;border-radius:50%;background:var(--gold);
+  box-shadow:0 0 12px var(--gold);animation:dotPulse 2s ease-in-out infinite;
+}
+@keyframes dotPulse{0%,100%{opacity:0.6}50%{opacity:1}}
+.hero-eyebrow span{
+  font-family:var(--mono);font-size:0.7rem;
+  letter-spacing:0.16em;text-transform:uppercase;color:var(--text-hi);
+}
+.hero h1{
+  font-family:var(--serif);font-weight:900;
+  font-size:clamp(2.8rem,6.5vw,5.8rem);
+  line-height:1.02;letter-spacing:-0.025em;
+  margin-bottom:2rem;color:#fff;
+  text-shadow:0 2px 30px rgba(0,0,0,0.6),0 1px 3px rgba(0,0,0,0.8);
+}
+.hero h1 em{font-style:italic;color:var(--terra);position:relative}
+.hero h1 em::after{
+  content:'';position:absolute;bottom:-4px;left:0;right:0;height:2px;
+  background:var(--terra);transform:scaleX(0);transform-origin:left;
+  animation:underline 1.5s var(--ease) 1s forwards;
+}
+@keyframes underline{to{transform:scaleX(1)}}
+.hero-sub{
+  font-size:clamp(1.05rem,1.5vw,1.25rem);line-height:1.6;
+  color:rgba(255,255,255,0.85);max-width:560px;margin-bottom:2.5rem;
+  text-shadow:0 1px 20px rgba(0,0,0,0.5);font-weight:400;
+}
+.hero-cta-row{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.hero-cta{
+  display:inline-flex;align-items:center;gap:12px;
+  padding:18px 44px;background:var(--terra);color:#fff;
+  font-family:var(--sans);font-weight:600;font-size:1rem;
+  border-radius:100px;text-decoration:none;
+  transition:all 0.4s var(--ease);
+  box-shadow:0 10px 40px rgba(224,122,95,0.25);
+}
+.hero-cta:hover{transform:translateY(-2px);background:var(--terra-deep);box-shadow:0 14px 50px rgba(224,122,95,0.4)}
+.hero-cta .arrow{transition:transform 0.3s var(--ease);font-size:1.1rem}
+.hero-cta:hover .arrow{transform:translateX(6px)}
+.hero-secondary{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:16px 28px;color:var(--text-hi);
+  font-family:var(--mono);font-size:0.75rem;
+  letter-spacing:0.12em;text-transform:uppercase;
+  text-decoration:none;border:1px solid rgba(255,255,255,0.15);
+  background:rgba(255,255,255,0.04);backdrop-filter:blur(20px);
+  border-radius:100px;transition:all 0.3s;
+}
+.hero-secondary:hover{border-color:rgba(255,255,255,0.4);background:rgba(255,255,255,0.08)}
+
+.hero-scroll{
+  position:absolute;bottom:30px;left:50%;transform:translateX(-50%);
+  z-index:3;display:flex;flex-direction:column;align-items:center;gap:10px;
+}
+.hero-scroll span{
+  font-family:var(--mono);font-size:0.6rem;
+  letter-spacing:0.25em;text-transform:uppercase;color:rgba(255,255,255,0.4);
+}
+.scroll-line{
+  width:1px;height:50px;
+  background:linear-gradient(180deg,var(--terra),transparent);
+  animation:scrollPulse 2s ease-in-out infinite;
+}
+@keyframes scrollPulse{0%,100%{opacity:0.3;transform:scaleY(0.6)}50%{opacity:1;transform:scaleY(1)}}
+
+/* ───────── STATS STRIP ───────── */
+.stats-strip{
+  background:var(--void);padding:clamp(70px,9vh,110px) 0;
+  position:relative;border-bottom:1px solid rgba(255,255,255,0.04);
+}
+.stats-strip::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(224,122,95,0.3),transparent);
+}
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(24px,4vw,60px)}
+.stat{text-align:center;padding:20px;position:relative}
+.stat:not(:last-child)::after{
+  content:'';position:absolute;right:0;top:20%;bottom:20%;width:1px;
+  background:linear-gradient(180deg,transparent,rgba(224,122,95,0.12),transparent);
+}
+.stat-num{
+  font-family:var(--serif);font-weight:900;
+  font-size:clamp(3rem,5.5vw,5rem);
+  color:var(--terra);line-height:1;margin-bottom:14px;letter-spacing:-0.02em;
+}
+.stat-desc{
+  font-family:var(--mono);font-size:0.7rem;
+  letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--text-mid);line-height:1.5;max-width:220px;margin:0 auto;
+}
+
+/* ───────── MARQUEE ───────── */
+.marquee-wrap{
+  overflow:hidden;padding:28px 0;
+  border-bottom:1px solid rgba(255,255,255,0.04);background:var(--void);
+}
+.marquee{display:flex;gap:80px;white-space:nowrap;animation:marquee 40s linear infinite}
+@keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.marquee span{
+  font-family:var(--serif);font-style:italic;
+  font-size:clamp(1.4rem,2.2vw,2rem);font-weight:700;
+  color:rgba(255,255,255,0.06);flex-shrink:0;
+}
+.marquee span.gold{color:rgba(245,166,35,0.12);font-style:normal}
+
+/* ───────── THE GAP ───────── */
+.gap-section{position:relative;padding:clamp(100px,14vh,180px) 0;overflow:hidden}
+.gap-inner{
+  display:grid;grid-template-columns:1.1fr 1fr;
+  gap:clamp(48px,7vw,120px);align-items:center;
+}
+.gap-visual{
+  position:relative;border-radius:24px;overflow:hidden;aspect-ratio:4/3;
+  box-shadow:0 30px 80px rgba(0,0,0,0.5);
+}
+.gap-visual img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s var(--ease)}
+.gap-visual::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,transparent 40%,rgba(10,10,10,0.5) 100%);
+}
+.gap-visual:hover img{transform:scale(1.05)}
+.gap-visual-badge{
+  position:absolute;bottom:24px;left:24px;z-index:2;
+  padding:10px 18px;background:rgba(10,10,10,0.7);
+  backdrop-filter:blur(20px);border-radius:100px;
+  border:1px solid rgba(255,255,255,0.1);
+  font-family:var(--mono);font-size:0.65rem;
+  letter-spacing:0.15em;text-transform:uppercase;color:var(--cream);
+}
+.gap-text h2{
+  font-family:var(--serif);font-weight:900;
+  font-size:clamp(2.2rem,4.5vw,3.8rem);
+  line-height:1.05;margin:1.2rem 0 1.8rem;letter-spacing:-0.015em;
+}
+.gap-text h2 em{font-style:italic;color:var(--terra)}
+.gap-text p{
+  font-size:clamp(1rem,1.2vw,1.1rem);line-height:1.75;
+  color:var(--text-mid);margin-bottom:1.2rem;
+}
+.gap-text p strong{color:var(--terra);font-weight:600}
+.gap-stats-inline{display:flex;gap:20px;margin-top:2rem;flex-wrap:wrap}
+.gap-stat{
+  padding:14px 20px;background:rgba(224,122,95,0.06);
+  border:1px solid rgba(224,122,95,0.15);border-radius:14px;
+  transition:all 0.4s var(--ease);
+}
+.gap-stat:hover{background:rgba(224,122,95,0.1);border-color:rgba(224,122,95,0.3)}
+.gap-stat .n{font-family:var(--serif);font-weight:900;font-size:1.8rem;color:var(--terra);line-height:1}
+.gap-stat .t{
+  font-family:var(--mono);font-size:0.62rem;
+  letter-spacing:0.12em;text-transform:uppercase;color:var(--text-mid);margin-top:4px;
+}
+
+/* ───────── VISION ───────── */
+.vision{
+  padding:clamp(100px,14vh,180px) 0;
+  background:linear-gradient(180deg,var(--void) 0%,var(--void-soft) 50%,var(--void) 100%);
+  position:relative;overflow:hidden;
+}
+.vision::before{
+  content:'';position:absolute;top:10%;left:-15%;
+  width:600px;height:600px;
+  background:radial-gradient(circle,rgba(224,122,95,0.05) 0%,transparent 70%);
+  pointer-events:none;
+}
+.vision-head{max-width:780px;margin-bottom:clamp(56px,7vh,96px)}
+.vision-head h2{
+  font-family:var(--serif);font-weight:900;
+  font-size:clamp(2.2rem,4.5vw,3.8rem);
+  line-height:1.05;margin:1.2rem 0 1.5rem;letter-spacing:-0.015em;
+}
+.vision-head h2 em{font-style:italic;color:var(--terra)}
+.vision-head p{
+  font-size:clamp(1rem,1.2vw,1.15rem);line-height:1.7;
+  color:var(--text-mid);max-width:620px;
+}
+.vision-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.v-card{
+  position:relative;border-radius:20px;overflow:hidden;
+  aspect-ratio:4/5;transition:all 0.6s var(--ease);cursor:default;
+}
+.v-card-img{position:absolute;inset:0}
+.v-card-img img{
+  width:100%;height:100%;object-fit:cover;
+  transition:transform 1.5s var(--ease),filter 0.6s;
+  filter:grayscale(20%) brightness(0.7);
+}
+.v-card::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(10,10,10,0.15) 0%,rgba(10,10,10,0.3) 40%,rgba(10,10,10,0.95) 100%);
+  z-index:1;
+}
+.v-card:hover{transform:translateY(-8px)}
+.v-card:hover .v-card-img img{transform:scale(1.08);filter:grayscale(0%) brightness(0.85)}
+.v-card-body{position:absolute;bottom:0;left:0;right:0;z-index:2;padding:clamp(24px,2.5vw,36px)}
+.v-card-num{
+  font-family:var(--mono);font-size:0.65rem;
+  letter-spacing:0.2em;color:var(--gold);margin-bottom:1rem;display:block;
+}
+.v-card h3{
+  font-family:var(--serif);font-weight:700;
+  font-size:clamp(1.3rem,1.8vw,1.6rem);
+  line-height:1.2;margin-bottom:0.8rem;color:#fff;
+}
+.v-card p{font-size:0.88rem;line-height:1.6;color:rgba(255,255,255,0.7)}
+
+/* ───────── STAKEHOLDERS ───────── */
+.stakeholders{
+  padding:clamp(100px,14vh,180px) 0;
+  background:var(--terra);color:#fff;position:relative;overflow:hidden;
+}
+.stakeholders::before{
+  content:'';position:absolute;top:-200px;right:-200px;
+  width:700px;height:700px;
+  background:radial-gradient(circle,rgba(255,255,255,0.08) 0%,transparent 50%);
+}
+.stakeholders::after{
+  content:'';position:absolute;bottom:-150px;left:-150px;
+  width:500px;height:500px;
+  background:radial-gradient(circle,rgba(10,10,10,0.1) 0%,transparent 60%);
+}
+.stake-head{max-width:700px;margin-bottom:clamp(48px,6vh,80px);position:relative;z-index:1}
+.stake-head .label{color:rgba(255,255,255,0.5)}
+.stake-head h2{
+  font-family:var(--serif);font-weight:900;
+  font-size:clamp(2.2rem,4.5vw,3.8rem);
+  line-height:1.05;margin:1.2rem 0;letter-spacing:-0.015em;
+}
+.stake-head p{font-size:1.1rem;line-height:1.7;color:rgba(255,255,255,0.8)}
+.stake-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;position:relative;z-index:1}
+.stake-card{
+  padding:clamp(32px,3vw,44px);border-radius:20px;
+  background:rgba(10,10,10,0.18);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border:1px solid rgba(255,255,255,0.08);transition:all 0.5s var(--ease);
+}
+.stake-card:hover{background:rgba(10,10,10,0.3);border-color:rgba(255,255,255,0.2);transform:translateY(-4px)}
+.stake-card .s-num{
+  font-family:var(--serif);font-weight:900;font-style:italic;
+  font-size:2.5rem;color:rgba(255,255,255,0.3);line-height:1;margin-bottom:1rem;
+}
+.stake-card h3{font-family:var(--serif);font-weight:700;font-size:1.5rem;margin-bottom:1rem;color:#fff}
+.stake-card > p{font-size:0.95rem;line-height:1.7;color:rgba(255,255,255,0.75);margin-bottom:1.5rem}
+.stake-tags{display:flex;flex-wrap:wrap;gap:6px}
+.stake-tags span{
+  padding:5px 12px;font-size:0.68rem;
+  font-family:var(--mono);letter-spacing:0.08em;
+  text-transform:uppercase;border-radius:100px;
+  background:rgba(255,255,255,0.12);color:rgba(255,255,255,0.9);
+}
+
+/* ───────── FINAL CTA ───────── */
+.cta-final{
+  position:relative;padding:clamp(120px,16vh,200px) 0;
+  overflow:hidden;text-align:center;
+}
+.cta-bg{position:absolute;inset:0;z-index:0}
+.cta-bg img{width:100%;height:100%;object-fit:cover;filter:brightness(0.35) saturate(1.1)}
+.cta-bg::after{
+  content:'';position:absolute;inset:0;
+  background:
+    linear-gradient(180deg,rgba(10,10,10,0.8) 0%,rgba(10,10,10,0.5) 50%,rgba(10,10,10,0.9) 100%),
+    radial-gradient(ellipse at center,transparent 0%,rgba(10,10,10,0.6) 80%);
+}
+.cta-content{position:relative;z-index:1}
+.cta-content .label{color:var(--gold);margin-bottom:2rem;display:inline-block}
+.cta-content h2{
+  font-family:var(--serif);font-weight:900;
+  font-size:clamp(2.8rem,6vw,5.2rem);
+  line-height:1.02;margin-bottom:1.5rem;letter-spacing:-0.02em;color:#fff;
+  text-shadow:0 2px 40px rgba(0,0,0,0.6);
+}
+.cta-content h2 em{font-style:italic;color:var(--terra)}
+.cta-content p{
+  font-size:clamp(1.05rem,1.4vw,1.25rem);line-height:1.7;
+  color:rgba(255,255,255,0.8);max-width:600px;margin:0 auto 3rem;
+}
+.cta-main{
+  display:inline-flex;align-items:center;gap:14px;
+  padding:22px 56px;background:var(--terra);color:#fff;
+  font-family:var(--sans);font-weight:600;font-size:1.1rem;
+  border-radius:100px;text-decoration:none;
+  transition:all 0.4s var(--ease);
+  box-shadow:0 10px 40px rgba(224,122,95,0.3);
+  animation:ctaPulse 3s ease-in-out infinite;
+}
+@keyframes ctaPulse{
+  0%,100%{box-shadow:0 10px 40px rgba(224,122,95,0.3),0 0 0 0 rgba(224,122,95,0.4)}
+  50%{box-shadow:0 14px 50px rgba(224,122,95,0.5),0 0 0 16px rgba(224,122,95,0)}
+}
+.cta-main:hover{transform:translateY(-3px);background:var(--terra-deep);animation:none}
+.cta-main .arrow{transition:transform 0.3s var(--ease);font-size:1.2rem}
+.cta-main:hover .arrow{transform:translateX(8px)}
+.cta-email{
+  margin-top:1.8rem;font-family:var(--mono);
+  font-size:0.85rem;color:rgba(255,255,255,0.5);letter-spacing:0.08em;
+}
+.cta-email a{color:var(--gold);text-decoration:none;border-bottom:1px solid transparent;transition:border-color 0.3s}
+.cta-email a:hover{border-bottom-color:var(--gold)}
+
+/* ───────── FOOTER ───────── */
+footer{padding:40px 0;background:var(--void);border-top:1px solid rgba(255,255,255,0.04)}
+footer .container{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+footer p{font-family:var(--mono);font-size:0.68rem;color:var(--text-lo);letter-spacing:0.08em}
+
+/* ───────── RESPONSIVE ───────── */
+@media(max-width:1024px){
+  .gap-inner{grid-template-columns:1fr}
+  .vision-grid,.stake-grid{grid-template-columns:1fr 1fr}
+  .v-card{aspect-ratio:5/4}
+  .stats-row{grid-template-columns:1fr}
+  .stat:not(:last-child)::after{display:none}
+}
+@media(max-width:680px){
+  .vision-grid,.stake-grid{grid-template-columns:1fr}
+  .v-card{aspect-ratio:4/3;max-height:400px}
+  .hero-cta-row{flex-direction:column;align-items:stretch}
+  .hero-cta,.hero-secondary{justify-content:center}
+  .gap-stats-inline{justify-content:space-between}
+}
+</style>
+</head>
+<body>
+
+<div class="cursor-glow" id="cursorGlow"></div>
+<div class="grain"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="container">
+    <a href="#" class="logo"><span class="logo-slash">/</span>autonode</a>
+    <a href="#cta" class="nav-btn">Talk to Us</a>
+  </div>
+</nav>
+
+<!-- ───── HERO ───── -->
+<section class="hero">
+  <div class="hero-bg">
+    <img src="/assets/hero-landscape.jpg" alt="EV lifecycle intelligence landscape">
+  </div>
+  <div class="container hero-content">
+    <div class="hero-eyebrow" data-reveal>
+      <span class="dot"></span>
+      <span>EV Lifecycle Intelligence · India</span>
+    </div>
+    <h1 data-reveal="0.1">The intelligence layer India's <em>EV transition</em> needs.</h1>
+    <p class="hero-sub" data-reveal="0.2">Residual value intelligence for passenger and commercial EVs. We make EVs financeable — so they become sellable.</p>
+    <div class="hero-cta-row" data-reveal="0.3">
+      <a href="#cta" class="hero-cta">Start a Conversation <span class="arrow">→</span></a>
+      <a href="#vision" class="hero-secondary">Our Vision</a>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- ───── STATS ───── -->
+<section class="stats-strip">
+  <div class="container">
+    <div class="stats-row">
+      <div class="stat" data-reveal>
+        <div class="stat-num"><span data-counter="82">0</span>%</div>
+        <div class="stat-desc">of EV financing demand remains unmet</div>
+      </div>
+      <div class="stat" data-reveal="0.1">
+        <div class="stat-num">~<span data-counter="5">0</span>%</div>
+        <div class="stat-desc">of buyers qualify for EV loans today</div>
+      </div>
+      <div class="stat" data-reveal="0.2">
+        <div class="stat-num">0</div>
+        <div class="stat-desc">India-specific residual value benchmarks</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───── MARQUEE ───── -->
+<div class="marquee-wrap">
+  <div class="marquee">
+    <span>Residual Value Intelligence</span><span class="gold">◆</span>
+    <span>Battery Risk Scoring</span><span class="gold">◆</span>
+    <span>Lender Integration API</span><span class="gold">◆</span>
+    <span>EV Lifecycle Data</span><span class="gold">◆</span>
+    <span>India-Native Models</span><span class="gold">◆</span>
+    <span>Residual Value Intelligence</span><span class="gold">◆</span>
+    <span>Battery Risk Scoring</span><span class="gold">◆</span>
+    <span>Lender Integration API</span><span class="gold">◆</span>
+    <span>EV Lifecycle Data</span><span class="gold">◆</span>
+    <span>India-Native Models</span><span class="gold">◆</span>
+  </div>
+</div>
+
+<!-- ───── THE GAP ───── -->
+<section class="gap-section">
+  <div class="container">
+    <div class="gap-inner">
+      <div class="gap-visual" data-reveal>
+        <img src="/assets/city-golden.jpg" alt="EV in urban India">
+        <div class="gap-visual-badge">The Structural Gap</div>
+      </div>
+      <div class="gap-text">
+        <div class="label" data-reveal="0.1">The Problem</div>
+        <h2 data-reveal="0.2">Every EV that can't be fairly financed is a sale <em>that doesn't happen.</em></h2>
+        <p data-reveal="0.3">Lenders don't have the data to underwrite EVs. So they restrict lending to prime-plus borrowers. <strong>The addressable buyer pool shrinks — not because the product isn't good, but because the data doesn't exist.</strong></p>
+        <p data-reveal="0.4">Buyback guarantees are priced without battery telemetry. Every assumption sits on a balance sheet as unpriced risk. We're building the intelligence layer that unlocks it.</p>
+        <div class="gap-stats-inline" data-reveal="0.5">
+          <div class="gap-stat"><div class="n">82%</div><div class="t">Unmet demand</div></div>
+          <div class="gap-stat"><div class="n">15-33%</div><div class="t">Fleet loan rates</div></div>
+          <div class="gap-stat"><div class="n">0</div><div class="t">India benchmarks</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───── VISION ───── -->
+<section class="vision" id="vision">
+  <div class="container">
+    <div class="vision-head">
+      <div class="label" data-reveal>The Vision</div>
+      <h2 data-reveal="0.1">One intelligence layer. <em>Every stakeholder wins.</em></h2>
+      <p data-reveal="0.2">We sit between OEM telematics and lender credit workflows — turning raw vehicle data into underwriting-grade intelligence. Every vehicle scored makes the model sharper. The cycle compounds.</p>
+    </div>
+    <div class="vision-grid">
+      <div class="v-card" data-reveal="0.1">
+        <div class="v-card-img"><img src="/assets/city-golden.jpg" alt=""></div>
+        <div class="v-card-body">
+          <span class="v-card-num">01 · Residual Value Engine</span>
+          <h3>India-calibrated depreciation curves.</h3>
+          <p>By make, model, variant, and geography — built from marketplace data and real-world telematics.</p>
+        </div>
+      </div>
+      <div class="v-card" data-reveal="0.2">
+        <div class="v-card-img"><img src="/assets/desert-sunset.jpg" alt=""></div>
+        <div class="v-card-body">
+          <span class="v-card-num">02 · Battery Risk Scorer</span>
+          <h3>The actuarial input insurers need.</h3>
+          <p>SoH grading, degradation trajectory, replacement probability — priced in, not guessed at.</p>
+        </div>
+      </div>
+      <div class="v-card" data-reveal="0.3">
+        <div class="v-card-img"><img src="/assets/city-street.jpg" alt=""></div>
+        <div class="v-card-body">
+          <span class="v-card-num">03 · Lender Integration API</span>
+          <h3>One call. Four answers.</h3>
+          <p>Residual score, battery grade, LTV range, confidence interval — plugged into underwriting at origination.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───── STAKEHOLDERS ───── -->
+<section class="stakeholders">
+  <div class="container">
+    <div class="stake-head">
+      <div class="label" data-reveal>Who This Serves</div>
+      <h2 data-reveal="0.1">Built for the people who move India's EV market.</h2>
+      <p data-reveal="0.2">No platform fee for OEMs. We monetise through lenders. You contribute data — we unlock your next wave of growth.</p>
+    </div>
+    <div class="stake-grid">
+      <div class="stake-card" data-reveal="0.1">
+        <div class="s-num">01</div>
+        <h3>For OEMs</h3>
+        <p>Your addressable market expands when lenders can say yes. Better buyback pricing, stronger CPO backbone, unlocked fleet pipelines.</p>
+        <div class="stake-tags"><span>Higher conversion</span><span>Better buyback</span><span>Fleet pipeline</span></div>
+      </div>
+      <div class="stake-card" data-reveal="0.2">
+        <div class="s-num">02</div>
+        <h3>For NBFCs & Insurers</h3>
+        <p>Underwriting-grade residual scores replace guesswork. Wider approval bands, accurate pricing, lower loss-given-default.</p>
+        <div class="stake-tags"><span>Lower LGD</span><span>Wider approvals</span><span>NPA recovery</span></div>
+      </div>
+      <div class="stake-card" data-reveal="0.3">
+        <div class="s-num">03</div>
+        <h3>For Investors</h3>
+        <p>Category-defining data infrastructure for India's EV financing gap. Compounding data moat with multi-stakeholder network effects.</p>
+        <div class="stake-tags"><span>Data moat</span><span>Network effects</span><span>Category creation</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───── FINAL CTA ───── -->
+<section class="cta-final" id="cta">
+  <div class="cta-bg"><img src="/assets/city-street.jpg" alt=""></div>
+  <div class="container cta-content">
+    <span class="label" data-reveal>The Next Step</span>
+    <h2 data-reveal="0.1">Let's build <em>India's EV intelligence layer</em> together.</h2>
+    <p data-reveal="0.2">We're selectively onboarding OEMs, NBFCs, and strategic investors. Reach out — we'll share the full thesis and the pilot framework.</p>
+    <a href="mailto:hello@autonodelabs.com?subject=Autonode%20%E2%80%94%20Partnership%20Inquiry" class="cta-main" data-reveal="0.3">
+      Email Us <span class="arrow">→</span>
+    </a>
+    <div class="cta-email" data-reveal="0.4">
+      or write to <a href="mailto:hello@autonodelabs.com">hello@autonodelabs.com</a>
+    </div>
+  </div>
+</section>
+
+<!-- ───── FOOTER ───── -->
+<footer>
+  <div class="container">
+    <a href="#" class="logo"><span class="logo-slash">/</span>autonode</a>
+    <p>autonodelabs.com · Confidential · 2026</p>
+  </div>
+</footer>
+
+<script>
+// Reveal on scroll
+const revealObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('[data-reveal]').forEach(el => revealObs.observe(el));
+
+// Counter
+const counterObs = new IntersectionObserver(entries => {
+  entries.forEach(x => {
+    if (!x.isIntersecting || x.target.dataset.counted) return;
+    x.target.dataset.counted = 'true';
+    const target = parseInt(x.target.dataset.counter);
+    let current = 0;
+    const step = Math.max(1, Math.floor(target / 50));
+    const timer = setInterval(() => {
+      current += step;
+      if (current >= target) { current = target; clearInterval(timer); }
+      x.target.textContent = current;
+    }, 30);
+  });
+}, { threshold: 0.5 });
+document.querySelectorAll('[data-counter]').forEach(el => counterObs.observe(el));
+
+// Nav scroll
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 80);
+});
+
+// Cursor glow
+const glow = document.getElementById('cursorGlow');
+document.addEventListener('mousemove', e => {
+  glow.style.left = e.clientX + 'px';
+  glow.style.top = e.clientY + 'px';
+});
+
+// Hero parallax
+const heroBg = document.querySelector('.hero-bg img');
+window.addEventListener('scroll', () => {
+  const y = window.scrollY;
+  if (y < window.innerHeight && heroBg) {
+    heroBg.style.transform = `scale(1.08) translateY(${y * 0.3}px)`;
+  }
+});
+
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', function(e) {
+    const href = this.getAttribute('href');
+    if (href === '#') return;
+    e.preventDefault();
+    const t = document.querySelector(href);
+    if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+
+// 3D tilt
+document.querySelectorAll('.stake-card, .v-card, .gap-stat').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const r = card.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width - 0.5;
+    const y = (e.clientY - r.top) / r.height - 0.5;
+    const base = card.classList.contains('v-card') ? 'translateY(-8px)' : 'translateY(-4px)';
+    card.style.transform = `${base} perspective(1000px) rotateX(${y * -3}deg) rotateY(${x * 3}deg)`;
+  });
+  card.addEventListener('mouseleave', () => { card.style.transform = ''; });
+});
+</script>
+</body>
+</html>

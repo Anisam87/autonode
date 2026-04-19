@@ -81,9 +81,21 @@ Stock sites don't carry this specific aesthetic (pastel AI-illustrated cars at s
 
 All text lives inline in `index.html`. Search for these section comments to jump to the right place:
 - `<!-- Hero -->` — headline, sub, CTAs
-- `<!-- Stats -->` — the three stat blocks
-- `<!-- Marquee -->` — the scrolling band of capability names
+- `<!-- Stats -->` — the three problem stats (82%, ~5%, 0)
+- `<!-- Marquee -->` — scrolling band of capability names
 - `<!-- Gap -->` — "Every EV that can't be fairly financed"
-- `<!-- Vision -->` — the three product cards
+- `<!-- Opportunity -->` — market sizing: 2W/4W/eLCV penetration today → 2030e, and the ₹164 Bn total
+- `<!-- Vision -->` — three product cards (Residual Value Engine / Battery Risk Scorer / Lender API)
 - `<!-- Stakeholders -->` — OEMs / NBFCs / investors cards
+- `<!-- Credibility -->` — "Built by operators" band (no names, just credentials + companies)
 - `<!-- Final CTA -->` — "Let's build India's EV intelligence layer"
+
+## Updating market numbers
+
+The Opportunity section uses data from FY25 (NITI Aayog, IBEF, JMK Research). Numbers to refresh periodically:
+- 2W EV penetration: currently 6% (FY25: 1.14 Mn sold)
+- 4W EV penetration: currently 2.5% (FY25: 106K sold)
+- eLCV: <2% (3W already 60%+)
+- 2030e total EV sales: 25 Mn units / $164 Bn market value
+
+Sources worth checking quarterly: VAHAN portal, SMEV, JMK Research's EV Annual Report.

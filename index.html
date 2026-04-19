@@ -351,16 +351,23 @@ nav .container {
 .hero-haze {
   position: absolute; inset: 0;
   background:
-    radial-gradient(ellipse at 85% 30%, rgba(255,220,180,0.28) 0%, transparent 40%),
-    radial-gradient(ellipse at 15% 70%, rgba(80,40,50,0.28) 0%, transparent 50%),
-    linear-gradient(180deg, transparent 55%, rgba(14,12,10,0.7) 100%);
+    radial-gradient(ellipse at 85% 25%, rgba(255,220,180,0.25) 0%, transparent 40%),
+    radial-gradient(ellipse at 15% 60%, rgba(80,40,50,0.3) 0%, transparent 50%);
   mix-blend-mode: soft-light;
 }
+/* DARKENING — ensures cream + terracotta text is legible over the warm illustration.
+   Top 30% of hero shows the art; bottom 70% progressively darkens toward void. */
 .hero-vignette {
   position: absolute; inset: 0;
   background:
-    radial-gradient(ellipse at center, transparent 30%, rgba(14,12,10,0.35) 90%),
-    linear-gradient(180deg, rgba(244,213,208,0.12) 0%, transparent 20%, transparent 70%, rgba(14,12,10,0.85) 100%);
+    radial-gradient(ellipse at center, transparent 25%, rgba(14,12,10,0.45) 95%),
+    linear-gradient(180deg,
+      rgba(244,213,208,0.05) 0%,
+      transparent 25%,
+      rgba(14,12,10,0.25) 45%,
+      rgba(14,12,10,0.65) 65%,
+      rgba(14,12,10,0.9) 85%,
+      rgba(14,12,10,0.97) 100%);
   pointer-events: none;
 }
 .hero-sun {
@@ -492,14 +499,20 @@ nav .container {
   color: var(--cream);
   max-width: 1100px;
   margin-bottom: 32px;
-  text-shadow: 0 2px 40px rgba(14,12,10,0.4);
+  text-shadow:
+    0 2px 24px rgba(14,12,10,0.7),
+    0 4px 60px rgba(14,12,10,0.5);
   font-variation-settings: "opsz" 144;
 }
 .hero h1 em {
   font-style: italic;
-  color: var(--terra);
-  font-weight: 400;
+  color: var(--terra-soft);      /* lighter terracotta — reads on warm+dark bg */
+  font-weight: 500;
   font-variation-settings: "opsz" 144, "SOFT" 50;
+  text-shadow:
+    0 2px 24px rgba(14,12,10,0.85),
+    0 4px 40px rgba(14,12,10,0.7),
+    0 0 1px rgba(14,12,10,0.4);
 }
 
 .hero-sub {
@@ -508,8 +521,10 @@ nav .container {
   color: var(--cream);
   max-width: 620px;
   margin-bottom: 48px;
-  text-shadow: 0 1px 10px rgba(14,12,10,0.5);
-  font-weight: 300;
+  text-shadow:
+    0 1px 14px rgba(14,12,10,0.75),
+    0 2px 32px rgba(14,12,10,0.5);
+  font-weight: 400;
 }
 
 .hero-cta-row {
@@ -1048,6 +1063,284 @@ nav .container {
 }
 
 /* ═══════════════════════════════════════════════════════════════
+   OPPORTUNITY — market sizing for investors/OEMs
+   ═══════════════════════════════════════════════════════════════ */
+.opportunity {
+  position: relative;
+  padding: clamp(100px, 14vh, 180px) 0;
+  background: var(--void);
+  overflow: hidden;
+  border-top: 1px solid rgba(250,242,231,0.04);
+}
+.opportunity::before {
+  content:'';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse at 80% 20%, rgba(210,119,97,0.08), transparent 50%),
+    radial-gradient(ellipse at 10% 80%, rgba(232,155,60,0.05), transparent 50%);
+  pointer-events: none;
+}
+
+.opp-head {
+  max-width: 900px;
+  margin-bottom: clamp(56px, 8vh, 90px);
+  position: relative;
+}
+.opp-head h2 {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(40px, 5.4vw, 84px);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--cream);
+  margin-top: 32px;
+  margin-bottom: 28px;
+  font-variation-settings: "opsz" 144;
+}
+.opp-head h2 em { font-style: italic; color: var(--terra); font-weight: 400; }
+.opp-head p {
+  font-size: clamp(15px, 1.1vw, 17px);
+  color: var(--cream-mute);
+  line-height: 1.65;
+  max-width: 680px;
+}
+
+.opp-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  position: relative;
+  margin-bottom: 40px;
+}
+
+.opp-seg {
+  padding: 36px 30px 32px;
+  background: rgba(23,20,18,0.5);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(250,242,231,0.08);
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.5s var(--ease), border-color 0.5s;
+}
+.opp-seg:hover {
+  transform: translateY(-4px);
+  border-color: rgba(210,119,97,0.4);
+}
+.opp-seg::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 2px;
+  background: var(--terra);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.8s var(--ease-expo) 0.1s;
+}
+.opp-seg.in::before { transform: scaleY(1); }
+
+.opp-seg-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  color: var(--terra);
+  text-transform: uppercase;
+  font-weight: 500;
+  margin-bottom: 28px;
+}
+
+.opp-cols {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  justify-content: space-between;
+}
+
+.opp-now, .opp-then {
+  flex: 1;
+}
+.opp-then .opp-val { color: var(--terra); }
+
+.opp-val {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(38px, 4vw, 56px);
+  line-height: 1;
+  letter-spacing: -0.035em;
+  color: var(--cream);
+  display: block;
+  font-variation-settings: "opsz" 144;
+  margin-bottom: 6px;
+}
+.opp-val sup {
+  font-size: 0.36em;
+  vertical-align: top;
+  font-family: var(--mono);
+  letter-spacing: 0.05em;
+  margin-left: 2px;
+  color: inherit;
+  opacity: 0.85;
+  top: 0.5em;
+}
+
+.opp-caption {
+  font-family: var(--sans);
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--cream-dim);
+  display: block;
+}
+.opp-now .opp-caption { max-width: 120px; }
+
+.opp-arrow {
+  font-family: var(--mono);
+  font-size: 18px;
+  color: var(--cream-faint);
+  padding: 0 4px;
+  align-self: center;
+  margin-bottom: 18px;
+}
+
+.opp-total {
+  margin-top: 40px;
+  padding: 36px 40px;
+  background: var(--terra);
+  color: var(--cream);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 40px;
+  flex-wrap: wrap;
+  position: relative;
+  overflow: hidden;
+  border-radius: 4px;
+}
+.opp-total::after {
+  content:'';
+  position: absolute;
+  top: 0; right: 0; width: 180px; height: 180px;
+  background: radial-gradient(circle, rgba(250,242,231,0.12), transparent 70%);
+  pointer-events: none;
+}
+.opp-total-left .opp-total-head {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(250,242,231,0.75);
+  margin-bottom: 10px;
+}
+.opp-total-left .opp-total-val {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(28px, 3.4vw, 48px);
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  color: var(--cream);
+  font-variation-settings: "opsz" 144;
+}
+.opp-total-left .opp-total-val em {
+  font-style: italic;
+  font-weight: 500;
+}
+.opp-total-right {
+  font-family: var(--sans);
+  font-size: 13px;
+  line-height: 1.5;
+  color: rgba(250,242,231,0.88);
+  max-width: 320px;
+  font-style: italic;
+  text-align: right;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   CREDIBILITY — "built by operators" band
+   ═══════════════════════════════════════════════════════════════ */
+.credibility {
+  position: relative;
+  padding: clamp(80px, 12vh, 140px) 0 clamp(80px, 12vh, 140px);
+  background: var(--void-soft);
+  overflow: hidden;
+  border-top: 1px solid rgba(250,242,231,0.04);
+  border-bottom: 1px solid rgba(250,242,231,0.04);
+}
+
+.cred-head {
+  max-width: 860px;
+  margin-bottom: clamp(48px, 7vh, 80px);
+}
+.cred-head h2 {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(36px, 4.8vw, 74px);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--cream);
+  margin-top: 32px;
+  margin-bottom: 28px;
+  font-variation-settings: "opsz" 144;
+}
+.cred-head h2 em { font-style: italic; color: var(--terra); font-weight: 400; }
+.cred-head p {
+  font-size: clamp(15px, 1.1vw, 17px);
+  color: var(--cream-mute);
+  line-height: 1.65;
+  max-width: 680px;
+}
+
+.cred-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(24px, 3vw, 48px);
+  margin-bottom: clamp(48px, 6vh, 72px);
+  padding-top: clamp(32px, 4vh, 48px);
+  border-top: 1px solid rgba(250,242,231,0.08);
+}
+.cred-stat .n {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(36px, 4vw, 56px);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--terra);
+  font-variation-settings: "opsz" 144;
+  margin-bottom: 12px;
+}
+.cred-stat .l {
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--cream-mute);
+  line-height: 1.4;
+  max-width: 180px;
+}
+
+.cred-logos-head {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--cream-dim);
+  margin-bottom: 24px;
+}
+.cred-logos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px 48px;
+  align-items: center;
+}
+.cred-logos span {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-style: italic;
+  font-size: clamp(18px, 1.6vw, 24px);
+  color: var(--cream-mute);
+  letter-spacing: -0.015em;
+  font-variation-settings: "opsz" 48;
+  transition: color 0.3s var(--ease);
+}
+.cred-logos span:hover { color: var(--cream); }
+
+/* ═══════════════════════════════════════════════════════════════
    FINAL CTA
    ═══════════════════════════════════════════════════════════════ */
 .cta-final {
@@ -1185,8 +1478,12 @@ footer p {
   .gap-inner { grid-template-columns: 1fr; gap: 56px; }
   .vision-grid { grid-template-columns: 1fr 1fr; }
   .stake-grid  { grid-template-columns: 1fr 1fr; }
+  .opp-grid    { grid-template-columns: 1fr; }
+  .cred-stats  { grid-template-columns: 1fr 1fr; gap: 32px; }
   .stats-row   { grid-template-columns: 1fr; gap: 40px; }
   .nav-meta    { display: none; }
+  .opp-total   { flex-direction: column; align-items: flex-start; }
+  .opp-total-right { text-align: left; }
 }
 @media (max-width: 720px) {
   .vision-grid, .stake-grid { grid-template-columns: 1fr; }
@@ -1350,6 +1647,72 @@ footer p {
   </div>
 </section>
 
+<!-- Opportunity -->
+<section class="opportunity" id="opportunity">
+  <div class="container">
+    <div class="opp-head">
+      <div class="label" data-reveal>The opportunity</div>
+      <h2 data-reveal="0.1">India will put <em>25 million EVs</em> on road every year by 2030.</h2>
+      <p data-reveal="0.2">Today, the financing system reaches a small fraction of that demand. Every segment is compounding. Every segment is under-underwritten. The intelligence layer that unlocks it does not exist yet.</p>
+    </div>
+
+    <div class="opp-grid">
+      <div class="opp-seg" data-reveal="0.1">
+        <div class="opp-seg-label">Two-wheelers · 20 Mn/yr market</div>
+        <div class="opp-cols">
+          <div class="opp-now">
+            <span class="opp-val">6<sup>%</sup></span>
+            <span class="opp-caption">EV penetration<br>FY25: 1.14&nbsp;Mn sold</span>
+          </div>
+          <div class="opp-arrow">→</div>
+          <div class="opp-then">
+            <span class="opp-val">16<sup>Mn</sup></span>
+            <span class="opp-caption">2030e EV sales<br>80% gov't target</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="opp-seg" data-reveal="0.2">
+        <div class="opp-seg-label">Passenger 4W · 4.3 Mn/yr market</div>
+        <div class="opp-cols">
+          <div class="opp-now">
+            <span class="opp-val">2.5<sup>%</sup></span>
+            <span class="opp-caption">EV penetration<br>FY25: 106K sold</span>
+          </div>
+          <div class="opp-arrow">→</div>
+          <div class="opp-then">
+            <span class="opp-val">1.3<sup>Mn</sup></span>
+            <span class="opp-caption">2030e EV sales<br>30% gov't target</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="opp-seg" data-reveal="0.3">
+        <div class="opp-seg-label">eLCV &amp; 3W · 2 Mn/yr market</div>
+        <div class="opp-cols">
+          <div class="opp-now">
+            <span class="opp-val">&lt;2<sup>%</sup></span>
+            <span class="opp-caption">eLCV penetration<br>3W: already 60%+</span>
+          </div>
+          <div class="opp-arrow">→</div>
+          <div class="opp-then">
+            <span class="opp-val">1.4<sup>Mn</sup></span>
+            <span class="opp-caption">2030e EV sales<br>70% gov't target</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="opp-total" data-reveal="0.4">
+      <div class="opp-total-left">
+        <div class="opp-total-head">Combined addressable EV market · 2030</div>
+        <div class="opp-total-val"><em>~25 Mn</em> EVs sold / year · <em>$164 Bn</em> market value</div>
+      </div>
+      <div class="opp-total-right">Every one needs financing. Every one needs residual-value intelligence. None of it exists today.</div>
+    </div>
+  </div>
+</section>
+
 <!-- Vision -->
 <section class="vision" id="vision">
   <div class="container">
@@ -1414,6 +1777,50 @@ footer p {
         <p>Category-defining data infrastructure for India's EV financing gap. Compounding data moat with multi-stakeholder network effects — every vehicle feeds the next score.</p>
         <div class="stake-tags"><span>Data moat</span><span>Network effects</span><span>Category creation</span></div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- Credibility -->
+<section class="credibility">
+  <div class="container">
+    <div class="cred-head">
+      <div class="label" data-reveal>The team</div>
+      <h2 data-reveal="0.1">Built by operators <em>who've run this market.</em></h2>
+      <p data-reveal="0.2">Senior leadership across automotive strategy, lifecycle pricing, and financial services. Two-time founders with prior exits. Operators — not academics. The full team profile is available under NDA.</p>
+    </div>
+
+    <div class="cred-stats">
+      <div class="cred-stat" data-reveal="0.1">
+        <div class="n">60<sup style="font-family:var(--mono);font-size:0.35em;letter-spacing:0.05em;vertical-align:top;">yrs+</sup></div>
+        <div class="l">Combined operating experience in auto &amp; financial services</div>
+      </div>
+      <div class="cred-stat" data-reveal="0.2">
+        <div class="n">2×</div>
+        <div class="l">Founders with prior exits in consumer &amp; tech</div>
+      </div>
+      <div class="cred-stat" data-reveal="0.3">
+        <div class="n">3</div>
+        <div class="l">OEM CEO-level conversations already live</div>
+      </div>
+      <div class="cred-stat" data-reveal="0.4">
+        <div class="n">4</div>
+        <div class="l">IITs &amp; IIMs on the founding team</div>
+      </div>
+    </div>
+
+    <div class="cred-logos-head" data-reveal="0.5">Prior automotive &amp; strategy experience across</div>
+    <div class="cred-logos" data-reveal="0.6">
+      <span>BYD</span>
+      <span>Hyundai</span>
+      <span>Nissan</span>
+      <span>Tata Motors</span>
+      <span>J.D. Power</span>
+      <span>Accenture</span>
+      <span>Deloitte</span>
+      <span>Danone</span>
+      <span>Asian Paints</span>
+      <span>Tata 1mg</span>
     </div>
   </div>
 </section>
@@ -1532,7 +1939,7 @@ const revealObs = new IntersectionObserver(entries => {
     }
   });
 }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-document.querySelectorAll('[data-reveal], .stat').forEach(el => revealObs.observe(el));
+document.querySelectorAll('[data-reveal], .stat, .opp-seg').forEach(el => revealObs.observe(el));
 
 // Stat count-up
 const statObs = new IntersectionObserver(entries => {

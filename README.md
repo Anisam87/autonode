@@ -1,20 +1,34 @@
-# Autonode Website — Cinematic v2
+# Autonode Website — Cinematic v3 (video)
 
-Teaser site for OEM, NBFC, and investor partnership inquiries. Single-file HTML + four image assets, zero build step.
+Teaser site for OEM, NBFC, and investor partnership inquiries. Single-file HTML + video/poster assets, zero build step.
 
 ## Structure
 
 ```
 autonode-site/
-├── index.html          # the entire site
-├── vercel.json         # deploy config + long-lived asset caching
+├── index.html                # the entire site
+├── vercel.json               # deploy config + long-lived asset caching
 ├── README.md
 └── assets/
-    ├── hero-landscape.jpg    # signature cover illustration
-    ├── city-golden.jpg       # urban gap section
-    ├── desert-sunset.jpg     # vision card 02
-    └── city-street.jpg       # vision card 03
+    ├── hero-landscape.mp4    # signature cover — Cybertruck sunset
+    ├── hero-landscape.jpg    # poster fallback
+    ├── city-golden.mp4       # urban gap section
+    ├── city-golden.jpg       # poster fallback
+    ├── desert-sunset.mp4     # vision card 02
+    ├── desert-sunset.jpg     # poster fallback
+    ├── city-street.mp4       # vision card 03
+    └── city-street.jpg       # poster fallback
 ```
+
+Total video payload: ~3.8 MB across 4 clips (535 KB – 1.4 MB each). All ~6 sec loops.
+
+## How videos behave
+
+- **Autoplay:** all videos autoplay on page load (muted — browser requirement for autoplay)
+- **Loop:** seamless ~6 sec loops
+- **Poster fallback:** JPGs show instantly while MP4s load, so no black frames
+- **Mobile:** `playsinline` prevents iOS from fullscreening them; `preload="metadata"` saves bandwidth on non-hero videos
+- **No audio:** tracks are stripped — cinema silent, background motion only
 
 ## What was fixed from v1
 
@@ -67,15 +81,28 @@ Or use any static server:
 npx serve .
 ```
 
-## Replacing images
+## Replacing videos
 
-Drop new JPGs into `assets/` with the **same filenames** (overwrite) and they pick up automatically. Or edit the `src="assets/..."` paths inside `index.html`.
+Drop new MP4s into `assets/` with the **same filenames** (overwrite). Also regenerate the poster JPG so there's no lag on load:
 
-**Performance note:** Keep each image under 500 KB. Use [squoosh.app](https://squoosh.app) to compress. The current images are already optimised (137 KB – 481 KB each).
+```bash
+# from the project folder
+ffmpeg -i assets/hero-landscape.mp4 -ss 00:00:02 -vframes 1 -q:v 3 assets/hero-landscape.jpg
+```
 
-## Generating more images in the same style
+**If you have a new video from Grok/Runway/etc.** and want to prep it for web (compress, crop watermark, etc.), here's the one-liner I used:
 
-Stock sites don't carry this specific aesthetic (pastel AI-illustrated cars at sunset). If you want more in the exact style, regenerate with the same AI prompt you used — keywords like `pastel anime illustration car sunset atmospheric cinematic 80s retro studio ghibli`.
+```bash
+# -vf "crop=iw:ih-60:0:0" strips 60px off the bottom (watermark zone)
+# scale to 1280w, CRF 28 = good balance of size/quality, -an = no audio
+ffmpeg -i source.mp4 \
+  -vf "crop=iw:ih-60:0:0,scale=1280:-2" \
+  -c:v libx264 -preset slow -crf 28 -pix_fmt yuv420p \
+  -movflags +faststart -an \
+  assets/new-video.mp4
+```
+
+**Performance target:** Keep each video under 1.5 MB. The hero is the only one set to `preload="auto"` (loads immediately). The other three use `preload="metadata"` so they only fully download when the user scrolls near them.
 
 ## Editing copy
 

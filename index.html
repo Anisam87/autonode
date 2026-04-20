@@ -337,15 +337,23 @@ nav .container {
   position: absolute;
   top: -4%; left: -4%;
   width: 108%; height: 108%;
-  background-image: url('assets/hero-landscape.jpg');
-  background-size: cover;
-  background-position: center center;
+  overflow: hidden;
+  will-change: transform;
+}
+.hero-bg video {
+  position: absolute;
+  top: 50%; left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto; height: auto;
+  transform: translate(-50%, -50%);
+  object-fit: cover;
   animation: kenBurns 28s var(--ease-in-out) infinite alternate;
   will-change: transform;
 }
 @keyframes kenBurns {
-  0%   { transform: scale(1.04) translate(0, 0); }
-  100% { transform: scale(1.15) translate(-1.5%, -1.5%); }
+  0%   { transform: translate(-50%, -50%) scale(1.04); }
+  100% { transform: translate(-51.5%, -51.5%) scale(1.15); }
 }
 
 .hero-haze {
@@ -732,7 +740,8 @@ nav .container {
   border-radius: 4px;
   box-shadow: 0 40px 100px rgba(0,0,0,0.5);
 }
-.gap-visual img {
+.gap-visual img,
+.gap-visual video {
   width: 100%; height: 100%;
   object-fit: cover;
   transition: transform 1.8s var(--ease);
@@ -905,12 +914,14 @@ nav .container {
   background: linear-gradient(180deg, transparent 40%, rgba(14,12,10,0.8) 100%);
   z-index: 2;
 }
-.v-card-img img {
+.v-card-img img,
+.v-card-img video {
   width: 100%; height: 100%;
   object-fit: cover;
   transition: transform 1.2s var(--ease);
 }
-.v-card:hover .v-card-img img { transform: scale(1.08); }
+.v-card:hover .v-card-img img,
+.v-card:hover .v-card-img video { transform: scale(1.08); }
 
 .v-card-body {
   padding: 28px 28px 32px;
@@ -1357,11 +1368,12 @@ nav .container {
   position: absolute; inset: 0;
   z-index: 0;
 }
-.cta-bg img {
+.cta-bg img,
+.cta-bg video {
   width: 100%; height: 100%;
   object-fit: cover;
   filter: brightness(0.32) saturate(1.1) contrast(1.05);
-  animation: kenBurns 35s var(--ease-in-out) infinite alternate;
+  animation: imgDrift 35s var(--ease-in-out) infinite alternate;
 }
 .cta-bg::after {
   content:'';
@@ -1541,7 +1553,11 @@ footer p {
 <!-- Hero -->
 <section class="hero">
   <div class="hero-stage">
-    <div class="hero-bg"></div>
+    <div class="hero-bg">
+      <video autoplay muted loop playsinline preload="auto" poster="assets/hero-landscape.jpg">
+        <source src="assets/hero-landscape.mp4" type="video/mp4">
+      </video>
+    </div>
     <div class="hero-sun"></div>
     <div class="hero-haze"></div>
     <div class="hero-vignette"></div>
@@ -1629,7 +1645,9 @@ footer p {
   <div class="container">
     <div class="gap-inner">
       <div class="gap-visual" data-reveal>
-        <img src="assets/city-golden.jpg" alt="EV in urban India">
+        <video autoplay muted loop playsinline preload="metadata" poster="assets/city-golden.jpg">
+          <source src="assets/city-golden.mp4" type="video/mp4">
+        </video>
         <div class="gap-visual-badge">The Structural Gap</div>
       </div>
       <div class="gap-text">
@@ -1723,7 +1741,11 @@ footer p {
     </div>
     <div class="vision-grid">
       <div class="v-card" data-reveal="0.1">
-        <div class="v-card-img"><img src="assets/hero-landscape.jpg" alt=""></div>
+        <div class="v-card-img">
+          <video autoplay muted loop playsinline preload="metadata" poster="assets/hero-landscape.jpg">
+            <source src="assets/hero-landscape.mp4" type="video/mp4">
+          </video>
+        </div>
         <div class="v-card-body">
           <span class="v-card-num">01 · Residual Value Engine</span>
           <h3>India-calibrated depreciation curves.</h3>
@@ -1731,7 +1753,11 @@ footer p {
         </div>
       </div>
       <div class="v-card" data-reveal="0.2">
-        <div class="v-card-img"><img src="assets/desert-sunset.jpg" alt=""></div>
+        <div class="v-card-img">
+          <video autoplay muted loop playsinline preload="metadata" poster="assets/desert-sunset.jpg">
+            <source src="assets/desert-sunset.mp4" type="video/mp4">
+          </video>
+        </div>
         <div class="v-card-body">
           <span class="v-card-num">02 · Battery Risk Scorer</span>
           <h3>The actuarial input insurers need.</h3>
@@ -1739,7 +1765,11 @@ footer p {
         </div>
       </div>
       <div class="v-card" data-reveal="0.3">
-        <div class="v-card-img"><img src="assets/city-street.jpg" alt=""></div>
+        <div class="v-card-img">
+          <video autoplay muted loop playsinline preload="metadata" poster="assets/city-street.jpg">
+            <source src="assets/city-street.mp4" type="video/mp4">
+          </video>
+        </div>
         <div class="v-card-body">
           <span class="v-card-num">03 · Lender Integration API</span>
           <h3>One call. Four answers.</h3>
@@ -1828,7 +1858,9 @@ footer p {
 <!-- Final CTA -->
 <section class="cta-final" id="cta">
   <div class="cta-bg">
-    <img src="assets/hero-landscape.jpg" alt="">
+    <video autoplay muted loop playsinline preload="metadata" poster="assets/hero-landscape.jpg">
+      <source src="assets/hero-landscape.mp4" type="video/mp4">
+    </video>
   </div>
   <div class="container cta-content">
     <span class="label" data-reveal>The next step</span>
@@ -1879,7 +1911,7 @@ document.querySelectorAll('a, button, .v-card, .stake-card, .gap-stat').forEach(
   });
 });
 
-// Hero mouse parallax
+// Hero mouse parallax — moves the outer wrapper, leaving Ken Burns on the video intact
 const heroBg = document.querySelector('.hero-bg');
 const heroStage = document.querySelector('.hero-stage');
 if (heroStage && heroBg) {
@@ -1887,7 +1919,7 @@ if (heroStage && heroBg) {
     const rect = heroStage.getBoundingClientRect();
     const x = (e.clientX / rect.width - 0.5) * 2;
     const y = (e.clientY / rect.height - 0.5) * 2;
-    heroBg.style.transform = `scale(1.1) translate(${-x * 1.2}%, ${-y * 1.2}%)`;
+    heroBg.style.transform = `translate(${-x * 1}%, ${-y * 1}%)`;
   });
 }
 

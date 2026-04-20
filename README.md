@@ -2,6 +2,31 @@
 
 Teaser site for OEM, NBFC, and investor partnership inquiries. Single-file HTML + video/poster assets, zero build step.
 
+## 🚨 Videos not playing? Read this first.
+
+**99% of the time, it's the `file://` problem.** If you're opening `index.html` by double-clicking it (so the URL bar shows `file:///…/index.html`), Chrome and Firefox **block video playback for security reasons**. The posters (still images) will show but the MP4s won't play.
+
+**Fix: serve the files over HTTP instead of opening the file directly.**
+
+Quickest local preview:
+```bash
+cd autonode-site
+python3 -m http.server 8000
+# then open http://localhost:8000 in your browser
+```
+
+Or use any of these:
+```bash
+npx serve .                    # Node.js
+php -S localhost:8000          # PHP
+```
+
+Or skip local entirely and just deploy to Vercel — once it's on a real URL, videos work.
+
+**Still not working after serving over HTTP?** Open `diagnostic.html` in the same folder — it's a standalone test page showing all four videos with status indicators. It'll tell you exactly what's failing (autoplay blocked, network error, format unsupported, etc.).
+
+---
+
 ## Structure
 
 ```

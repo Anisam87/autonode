@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Autonode · Video diagnostic</title>
+<style>
+  body { background: #0E0C0A; color: #FAF2E7; font-family: monospace; padding: 30px; max-width: 1200px; margin: 0 auto; }
+  h1 { color: #D27761; margin-bottom: 24px; }
+  p { line-height: 1.6; margin-bottom: 12px; color: rgba(250,242,231,0.7); }
+  .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-top: 30px; }
+  .card { background: #171412; padding: 16px; border: 1px solid rgba(250,242,231,0.1); border-radius: 4px; }
+  .card h3 { color: #D27761; margin-bottom: 10px; font-size: 14px; }
+  video { width: 100%; height: auto; display: block; background: #000; }
+  .status { margin-top: 10px; font-size: 12px; color: rgba(250,242,231,0.5); }
+  .status.ok { color: #7FA788; }
+  .status.err { color: #D27761; }
+  code { background: #000; padding: 2px 6px; border-radius: 2px; color: #E89B3C; }
+  .warn { background: #D27761; color: #FAF2E7; padding: 16px 20px; border-radius: 4px; margin-top: 20px; }
+  .warn strong { display: block; margin-bottom: 6px; font-size: 14px; }
+</style>
+</head>
+<body>
+<h1>/autonode · video diagnostic</h1>
+
+<p>If these four videos play below, your setup is fine and the main site will work once deployed. If they show posters (still images) but don't play, see the warning block below.</p>
+
+<div class="warn">
+  <strong>⚠️ If videos aren't playing, check the URL bar:</strong>
+  If it starts with <code>file:///</code> (you double-clicked the HTML file), <strong>browsers block video playback</strong> for security reasons. This is the #1 cause of "videos not working." Serve over HTTP instead — either deploy to Vercel, or run <code>python3 -m http.server 8000</code> in this folder and open <code>http://localhost:8000/diagnostic.html</code>.
+</div>
+
+<div class="grid">
+  <div class="card">
+    <h3>1. hero-landscape.mp4 (535 KB)</h3>
+    <video autoplay muted loop playsinline controls poster="assets/hero-landscape.jpg">
+      <source src="assets/hero-landscape.mp4" type="video/mp4">
+      Your browser can't play this video.
+    </video>
+    <div class="status" id="s1">loading...</div>
+  </div>
+
+  <div class="card">
+    <h3>2. city-golden.mp4 (1.4 MB)</h3>
+    <video autoplay muted loop playsinline controls poster="assets/city-golden.jpg">
+      <source src="assets/city-golden.mp4" type="video/mp4">
+      Your browser can't play this video.
+    </video>
+    <div class="status" id="s2">loading...</div>
+  </div>
+
+  <div class="card">
+    <h3>3. desert-sunset.mp4 (1.1 MB)</h3>
+    <video autoplay muted loop playsinline controls poster="assets/desert-sunset.jpg">
+      <source src="assets/desert-sunset.mp4" type="video/mp4">
+      Your browser can't play this video.
+    </video>
+    <div class="status" id="s3">loading...</div>
+  </div>
+
+  <div class="card">
+    <h3>4. city-street.mp4 (848 KB)</h3>
+    <video autoplay muted loop playsinline controls poster="assets/city-street.jpg">
+      <source src="assets/city-street.mp4" type="video/mp4">
+      Your browser can't play this video.
+    </video>
+    <div class="status" id="s4">loading...</div>
+  </div>
+</div>
+
+<p style="margin-top:30px;font-size:12px;">
+  Protocol: <code id="proto"></code> · 
+  User agent: <code id="ua"></code>
+</p>
+
+<script>
+document.getElementById('proto').textContent = window.location.protocol;
+document.getElementById('ua').textContent = navigator.userAgent.slice(0, 80) + '...';
+
+const videos = document.querySelectorAll('video');
+videos.forEach((v, i) => {
+  const s = document.getElementById('s' + (i+1));
+  v.addEventListener('playing', () => { s.textContent = '✓ playing'; s.className = 'status ok'; });
+  v.addEventListener('error', (e) => { s.textContent = '✗ error: ' + (v.error ? v.error.message : 'unknown'); s.className = 'status err'; });
+  v.addEventListener('stalled', () => { s.textContent = 'stalled — network issue?'; s.className = 'status err'; });
+  v.addEventListener('waiting', () => { s.textContent = 'buffering...'; });
+  v.addEventListener('canplay', () => { if (s.textContent === 'loading...') { s.textContent = 'ready (click play if not auto)'; } });
+  // kick
+  v.play().catch(err => { s.textContent = 'autoplay blocked: ' + err.message + ' — click the play button'; s.className = 'status err'; });
+});
+</script>
+</body>
+</html>

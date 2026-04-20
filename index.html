@@ -69,7 +69,7 @@ body {
 ::selection { background: var(--terra); color: var(--cream); }
 ::-webkit-scrollbar { width: 0; }
 
-img { max-width: 100%; display: block; }
+img, video { max-width: 100%; display: block; }
 
 .container {
   max-width: 1320px;
@@ -342,18 +342,17 @@ nav .container {
 }
 .hero-bg video {
   position: absolute;
-  top: 50%; left: 50%;
-  min-width: 100%;
-  min-height: 100%;
-  width: auto; height: auto;
-  transform: translate(-50%, -50%);
+  inset: 0;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   animation: kenBurns 28s var(--ease-in-out) infinite alternate;
   will-change: transform;
+  transform-origin: center center;
 }
 @keyframes kenBurns {
-  0%   { transform: translate(-50%, -50%) scale(1.04); }
-  100% { transform: translate(-51.5%, -51.5%) scale(1.15); }
+  0%   { transform: scale(1.04); }
+  100% { transform: scale(1.15) translate(-1.2%, -1.2%); }
 }
 
 .hero-haze {
@@ -1645,7 +1644,7 @@ footer p {
   <div class="container">
     <div class="gap-inner">
       <div class="gap-visual" data-reveal>
-        <video autoplay muted loop playsinline preload="metadata" poster="assets/city-golden.jpg">
+        <video autoplay muted loop playsinline preload="auto" poster="assets/city-golden.jpg">
           <source src="assets/city-golden.mp4" type="video/mp4">
         </video>
         <div class="gap-visual-badge">The Structural Gap</div>
@@ -1742,7 +1741,7 @@ footer p {
     <div class="vision-grid">
       <div class="v-card" data-reveal="0.1">
         <div class="v-card-img">
-          <video autoplay muted loop playsinline preload="metadata" poster="assets/hero-landscape.jpg">
+          <video autoplay muted loop playsinline preload="auto" poster="assets/hero-landscape.jpg">
             <source src="assets/hero-landscape.mp4" type="video/mp4">
           </video>
         </div>
@@ -1754,7 +1753,7 @@ footer p {
       </div>
       <div class="v-card" data-reveal="0.2">
         <div class="v-card-img">
-          <video autoplay muted loop playsinline preload="metadata" poster="assets/desert-sunset.jpg">
+          <video autoplay muted loop playsinline preload="auto" poster="assets/desert-sunset.jpg">
             <source src="assets/desert-sunset.mp4" type="video/mp4">
           </video>
         </div>
@@ -1766,7 +1765,7 @@ footer p {
       </div>
       <div class="v-card" data-reveal="0.3">
         <div class="v-card-img">
-          <video autoplay muted loop playsinline preload="metadata" poster="assets/city-street.jpg">
+          <video autoplay muted loop playsinline preload="auto" poster="assets/city-street.jpg">
             <source src="assets/city-street.mp4" type="video/mp4">
           </video>
         </div>
@@ -1858,7 +1857,7 @@ footer p {
 <!-- Final CTA -->
 <section class="cta-final" id="cta">
   <div class="cta-bg">
-    <video autoplay muted loop playsinline preload="metadata" poster="assets/hero-landscape.jpg">
+    <video autoplay muted loop playsinline preload="auto" poster="assets/hero-landscape.jpg">
       <source src="assets/hero-landscape.mp4" type="video/mp4">
     </video>
   </div>
@@ -1885,6 +1884,30 @@ footer p {
 </footer>
 
 <script>
+// ─── Force-play all videos (belt-and-suspenders for browsers that ignore autoplay) ───
+function kickVideos() {
+  document.querySelectorAll('video').forEach(v => {
+    v.muted = true;          // required for autoplay
+    v.playsInline = true;    // required on iOS Safari
+    const p = v.play();
+    if (p !== undefined) {
+      p.catch(err => {
+        // Autoplay blocked — try again on first user interaction
+        const retry = () => { v.play().catch(()=>{}); document.removeEventListener('click', retry); document.removeEventListener('touchstart', retry); document.removeEventListener('scroll', retry); };
+        document.addEventListener('click', retry, { once: true });
+        document.addEventListener('touchstart', retry, { once: true });
+        document.addEventListener('scroll', retry, { once: true });
+      });
+    }
+  });
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', kickVideos);
+} else {
+  kickVideos();
+}
+window.addEventListener('load', kickVideos);
+
 // Cursor
 const dot = document.querySelector('.cursor-dot');
 const ring = document.querySelector('.cursor-ring');
